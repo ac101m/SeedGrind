@@ -5,13 +5,24 @@ plugins {
 group 'com.ac101m'
 version '0.1'
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
 repositories {
     mavenCentral()
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+
+    implementation('com.github.KaptainWutax:MathUtils:5531c4a87b0f1bb85d1dab2bdd18ce375400626a') { transitive = false }
+    implementation('com.github.KaptainWutax:SeedUtils:42cbf8558f981862a0926a09f84da24bdc4f897d') { transitive = false }
+    implementation('com.github.KaptainWutax:NoiseUtils:785f6ff179496da96a0ce9fe35ae8947d808d724') { transitive = false }
+    implementation('com.github.KaptainWutax:BiomeUtils:ac94269e953a1fa8512729973bea461648821c3c') { transitive = false }
 }
 
 test {
@@ -21,5 +32,9 @@ test {
 jar {
     manifest {
         attributes 'Main-Class': 'com.ac101m.seedgrind.SeedGrind'
+    }
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
