@@ -1,36 +1,34 @@
-package com.ac101m.seedgrind.sampler;
+package com.ac101m.seedgrind.biome.sampler;
 
+import com.ac101m.seedgrind.util.WorldSampler;
 import com.ac101m.seedgrind.util.SeedGrindException;
 import com.ac101m.seedgrind.util.Vec3;
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.biomeutils.source.BiomeSource;
-import kaptainwutax.biomeutils.source.EndBiomeSource;
-import kaptainwutax.biomeutils.source.NetherBiomeSource;
-import kaptainwutax.biomeutils.source.OverworldBiomeSource;
 import kaptainwutax.seedutils.mc.Dimension;
 import kaptainwutax.seedutils.mc.MCVersion;
 
-public class BiomeSampler extends Sampler {
-    protected final BiomeSource m_biomeSource;
+public class BiomeSampler extends WorldSampler {
+    protected BiomeSource biomeSource;
 
-    public BiomeSampler(MCVersion mcVersion, Dimension dimension, long seed)
+    public static BiomeSampler newSampler(MCVersion mcVersion, long seed, Dimension dimension)
             throws SeedGrindException {
-
-        super(mcVersion, dimension, seed);
 
         switch (dimension) {
             case OVERWORLD:
-                m_biomeSource = new OverworldBiomeSource(mcVersion, seed);
-                break;
+                return new BiomeSamplerOverworld(mcVersion, seed);
             case NETHER:
-                m_biomeSource = new NetherBiomeSource(mcVersion, seed);
-                break;
+                return new BiomeSamplerNether(mcVersion, seed);
             case END:
-                m_biomeSource = new EndBiomeSource(mcVersion, seed);
-                break;
+                return new BiomeSamplerEnd(mcVersion, seed);
             default:
                 throw new SeedGrindException("Unrecognised dimension '" + dimension + "'");
         }
+    }
+
+    protected BiomeSampler(BiomeSource biomeSource) {
+        super(biomeSource.getVersion(), biomeSource.getWorldSeed(), biomeSource.getDimension());
+        this.biomeSource = biomeSource;
     }
 
     public Biome getBiome(Vec3 position) {
@@ -38,7 +36,6 @@ public class BiomeSampler extends Sampler {
     }
 
     public Biome getBiome(int x, int y, int z) {
-        m_sampleCount++;
-        return m_biomeSource.getBiome(x, y, z);
+        return this.biomeSource.getBiome(x, y, z);
     }
 }
