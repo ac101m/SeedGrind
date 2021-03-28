@@ -1,6 +1,6 @@
 package com.ac101m.seedgrind;
 
-import com.ac101m.seedgrind.sampler.BiomeSampler;
+import com.ac101m.seedgrind.biome.sampler.BiomeSampler;
 import com.ac101m.seedgrind.util.SeedGrindException;
 import com.ac101m.seedgrind.util.Vec3;
 import kaptainwutax.biomeutils.Biome;
@@ -46,7 +46,7 @@ public class SeedGrind {
             System.exit(1);
         }
 
-        BiomeSampler biomeSampler = new BiomeSampler(gameVersion, dimension, seed);
+        BiomeSampler biomeSampler = BiomeSampler.newSampler(gameVersion, seed, dimension);
         Biome biome = biomeSampler.getBiome(position);
 
         System.out.println("game version: " + gameVersion.name());
