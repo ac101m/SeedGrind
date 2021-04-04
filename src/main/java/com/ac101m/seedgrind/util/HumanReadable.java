@@ -6,9 +6,9 @@ public class HumanReadable {
     public static String SI(double value) {
         String units = "";
 
-        for (int i = 0; i < s_SIUnits.length; i++) {
+        for (String s_siUnit : s_SIUnits) {
             if (value < 1000) {
-                units = s_SIUnits[i];
+                units = s_siUnit;
                 break;
             }
             value /= 1000;
