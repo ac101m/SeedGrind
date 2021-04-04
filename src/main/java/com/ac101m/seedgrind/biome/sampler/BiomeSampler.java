@@ -12,6 +12,13 @@ public class BiomeSampler extends WorldSampler {
     protected BiomeSource biomeSource;
     protected long sampleCount = 0;
 
+    /**
+     * Factory method for creating a biome samplers of varying types.
+     * @param mcVersion Game version.
+     * @param seed World seed.
+     * @param dimension World dimension.
+     * @return A new biome sampler object.
+     */
     public static BiomeSampler newSampler(MCVersion mcVersion, long seed, Dimension dimension)
             throws SeedGrindException {
 
@@ -32,10 +39,18 @@ public class BiomeSampler extends WorldSampler {
         this.biomeSource = biomeSource;
     }
 
+    /**
+     * Get biome from Vec3 coordinates
+     * @return Biome object representative of the biome at the specified position.
+     */
     public Biome getBiome(Vec3 position) {
         return getBiome(position.x, position.y, position.z);
     }
 
+    /**
+     * Get biome from integer coordinates
+     * @return Biome object representative of the biome at the specified position.
+     */
     public Biome getBiome(int x, int y, int z) {
         this.sampleCount++;
         return this.biomeSource.getBiome(x, y, z);
