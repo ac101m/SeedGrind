@@ -10,6 +10,7 @@ import kaptainwutax.seedutils.mc.MCVersion;
 
 public class BiomeSampler extends WorldSampler {
     protected BiomeSource biomeSource;
+    protected long sampleCount = 0;
 
     public static BiomeSampler newSampler(MCVersion mcVersion, long seed, Dimension dimension)
             throws SeedGrindException {
@@ -36,6 +37,9 @@ public class BiomeSampler extends WorldSampler {
     }
 
     public Biome getBiome(int x, int y, int z) {
+        this.sampleCount++;
         return this.biomeSource.getBiome(x, y, z);
     }
+
+    public long getSampleCount() { return this.sampleCount; }
 }
