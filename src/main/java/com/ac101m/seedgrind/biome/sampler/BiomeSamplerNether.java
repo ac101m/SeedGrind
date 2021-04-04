@@ -1,7 +1,6 @@
 package com.ac101m.seedgrind.biome.sampler;
 
 import kaptainwutax.biomeutils.source.NetherBiomeSource;
-import kaptainwutax.seedutils.mc.Dimension;
 import kaptainwutax.seedutils.mc.MCVersion;
 
 public class BiomeSamplerNether extends BiomeSampler {
