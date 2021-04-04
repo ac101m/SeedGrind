@@ -1,10 +1,7 @@
 import com.ac101m.seedgrind.biome.sampler.BiomeSampler;
 import com.ac101m.seedgrind.biome.search.Engine;
 import com.ac101m.seedgrind.biome.search.SimpleEngine;
-import com.ac101m.seedgrind.util.Area;
-import com.ac101m.seedgrind.util.HumanReadable;
-import com.ac101m.seedgrind.util.SeedGrindException;
-import com.ac101m.seedgrind.util.Vec2;
+import com.ac101m.seedgrind.util.*;
 
 import kaptainwutax.biomeutils.Biome;
 import kaptainwutax.seedutils.mc.Dimension;
@@ -86,8 +83,10 @@ public class TestSimpleEngine {
         }
     }
 
-    //@Test /* Currently disabled */
+    @Test
     public void testSpeed() throws SeedGrindException {
+        System.out.println("Resolution  Samples     duration    Samples/s   sqkm/s");
+
         long seed = 0;
 
         for (int resolution = 0; resolution < 10; resolution++) {
@@ -99,11 +98,17 @@ public class TestSimpleEngine {
             engine.findAllBiomes(area);
             long tEnd = System.nanoTime();
 
-            double durationSeconds = (double)(tEnd - tStart) / 1000000000.0;
+            double durationSeconds = (double) (tEnd - tStart) / 1000000000.0;
+            double sampleRate = biomeSampler.getSampleCount() / durationSeconds;
+            double sqkmPerSample = (1 << resolution) * (1 << resolution) / 1000000.0;
 
             System.out.println(
-                    "Samples per second (resolution=" + resolution + "): " +
-                    HumanReadable.SI(biomeSampler.getSampleCount() / durationSeconds));
+                    StringUtil.padRight(String.valueOf(resolution), 12) +
+                    StringUtil.padRight(String.valueOf(biomeSampler.getSampleCount()), 12) +
+                    StringUtil.padRight(HumanReadable.time(durationSeconds), 12) +
+                    StringUtil.padRight(HumanReadable.si(sampleRate), 12) +
+                    StringUtil.padRight(HumanReadable.si(sqkmPerSample * sampleRate), 12)
+            );
         }
     }
 }
