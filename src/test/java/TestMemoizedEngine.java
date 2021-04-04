@@ -19,26 +19,25 @@ public class TestMemoizedEngine {
         MCVersion gameVersion = MCVersion.v1_16_4;
         Dimension dimension = Dimension.OVERWORLD;
 
-        for (int resolution = 0; resolution <= 10; resolution++) {
-            for (long seed = 0; seed < 64; seed++) {
-                for (int radius = 64; radius <= 32768; radius <<= 1) {
+        for (long seed = 0; seed < 4; seed++) {
+            for (int resolution = 0; resolution < 10; resolution++) {
+                int radius = (1 << resolution) * 32;
 
-                    // Skip anything that will take too long to process
-                    if ((radius * 2) / (1 << resolution) > 64) {
-                        continue;
-                    }
+                System.out.println(
+                        "Testing: resolution=" + resolution +
+                        " seed=" + seed +
+                        " radius=" + radius);
 
-                    BiomeSampler simpleEngineSampler = BiomeSampler.newSampler(gameVersion, seed, dimension);
-                    BiomeSampler memoizedEngineSampler = BiomeSampler.newSampler(gameVersion, seed, dimension);
+                BiomeSampler simpleEngineSampler = BiomeSampler.newSampler(gameVersion, seed, dimension);
+                BiomeSampler memoizedEngineSampler = BiomeSampler.newSampler(gameVersion, seed, dimension);
 
-                    Area area = new Area(new Vec2(0, 0), radius);
+                Area area = new Area(new Vec2(0, 0), radius);
 
-                    Set<Biome> expectedBiomes = new SimpleEngine(simpleEngineSampler, resolution, area).findAllBiomes(area);
-                    Set<Biome> foundBiomes = new MemoizedEngine(memoizedEngineSampler, resolution, area).findAllBiomes(area);
+                Set<Biome> expectedBiomes = new SimpleEngine(simpleEngineSampler, resolution, area).findAllBiomes(area);
+                Set<Biome> foundBiomes = new MemoizedEngine(memoizedEngineSampler, resolution, area).findAllBiomes(area);
 
-                    assert (expectedBiomes.containsAll(foundBiomes));
-                    assert (foundBiomes.containsAll(expectedBiomes));
-                }
+                assert (expectedBiomes.containsAll(foundBiomes));
+                assert (foundBiomes.containsAll(expectedBiomes));
             }
         }
     }
